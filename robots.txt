@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://otaro416-cell.github.io/rahmet/sitemap.xml
