@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Googleマップの口コミに、お店の口調で返信の案をつくってLINEでお届け。個人店のための口コミ返信サービス。月額1,480円、初月無料。">
+<meta property="og:title" content="ラフメット 口コミ返信">
+<meta property="og:description" content="届いた口コミに、きちんと「ありがとう」を。個人店のための口コミ返信サービス。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Ccircle cx='15' cy='15' r='15' fill='%23f6c343'/%3E%3Cpath d='M0 15a15 15 0 0 0 30 0z' fill='%23e8553e'/%3E%3C/svg%3E">
+<title>ラフメット｜個人店のための口コミ返信</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: 色の帯（カラーブロック）でセクションを区切る。見本は3枚の色違いの便箋を横に並べる。
+   明るい配色ひとつで仕上げる（ダークモードでも同じ見た目） */
+:root {
+  --paper: #ffffff;
+  --ink: #1a1a1a;
+  --sub: #5c5c5c;
+  --red: #e8553e;
+  --yellow: #f6c343;
+  --blue: #3d8bd4;
+  --green: #2b9670;
+  --pink: #f4b3c2;
+  --navy: #1e2858;
+  --font-ja: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  --font-latin: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-ja); font-size: 15px; line-height: 1.9; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { margin: 0; font-weight: 900; line-height: 1.45; }
+p, dl, dd, ol { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* 言葉の途中で改行しないためのかたまり */
+.nw { display: inline-block; }
+
+.band { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.inner { max-width: 1080px; margin: 0 auto; }
+.latin { font-family: var(--font-latin); }
+
+/* Header */
+.top .inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; }
+.mark { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.mark svg { flex: none; }
+.mark b { font-family: var(--font-latin); font-weight: 800; font-size: 24px; letter-spacing: -.01em; }
+.top nav { display: flex; gap: 24px; font-size: 13px; font-weight: 500; }
+.top nav a { text-decoration: none; }
+.top nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Hero */
+.hero .inner { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; padding-block: 40px 80px; }
+.hero .inner > * { min-width: 0; }
+.hero h1 { font-size: clamp(32px, 5.4vw, 60px); line-height: 1.35; letter-spacing: .01em; }
+.hero h1 .hl { color: var(--red); }
+.hero .lead { margin-top: 24px; font-size: 16px; color: var(--sub); max-width: 28em; }
+.hero .cta-row { margin-top: 32px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.btn { display: inline-block; background: var(--ink); color: var(--paper); text-decoration: none; font-weight: 700; padding: 14px 30px; border-radius: 4px; border: 0; font: inherit; font-weight: 700; cursor: pointer; }
+.btn:hover { background: var(--red); }
+.hero .price { font-size: 14px; }
+.hero .price b { font-family: var(--font-latin); font-size: 22px; font-weight: 800; }
+.art { width: 100%; max-width: 440px; justify-self: end; aspect-ratio: 1; }
+
+/* Letters（見本） */
+.letters { background: var(--paper); }
+.letters .inner { padding-block: 24px 88px; }
+.sec-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.kicker { font-family: var(--font-latin); font-weight: 700; font-size: 14px; letter-spacing: .04em; }
+.sec-head h2 { font-size: clamp(22px, 3.2vw, 32px); }
+.cards { margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.card { border-radius: 6px; padding: 26px 24px 28px; display: grid; gap: 18px; align-content: start; }
+.card.c1 { background: var(--yellow); }
+.card.c2 { background: var(--pink); }
+.card.c3 { background: #bfe0f7; }
+.card .tag { font-family: var(--font-latin); font-size: 12px; font-weight: 700; letter-spacing: .06em; display: flex; justify-content: space-between; gap: 8px; }
+.card .review { font-size: 13px; line-height: 1.8; padding-bottom: 18px; border-bottom: 1.5px dashed rgba(26,26,26,.35); }
+.card .review span { display: block; font-weight: 700; margin-bottom: 4px; }
+.card .reply-label { font-size: 12px; font-weight: 700; }
+.card .reply { font-size: 14px; line-height: 1.9; white-space: pre-line; }
+
+/* About（紺の帯） */
+.about { background: var(--navy); color: #fff; }
+.about .inner { padding-block: 88px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.about .inner > * { min-width: 0; }
+.about .kicker { color: var(--yellow); }
+.about h2 { margin-top: 10px; font-size: clamp(24px, 3.4vw, 36px); }
+.about p { color: rgba(255,255,255,.82); }
+.about p + p { margin-top: 14px; }
+
+/* Steps */
+.how .inner { padding-block: 88px; }
+.steps { list-style: none; padding: 0; margin-top: 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.steps li { display: grid; gap: 10px; align-content: start; }
+.steps .num { font-family: var(--font-latin); font-weight: 800; font-size: 56px; line-height: 1; }
+.steps li:nth-child(1) .num { color: var(--red); }
+.steps li:nth-child(2) .num { color: var(--blue); }
+.steps li:nth-child(3) .num { color: var(--green); }
+.steps h3 { font-size: 18px; }
+.steps p { color: var(--sub); }
+
+/* Price（赤の帯） */
+.price-band { background: var(--red); color: #fff; }
+.price-band .inner { padding-block: 80px; display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; align-items: center; }
+.price-band .inner > * { min-width: 0; }
+.price-band .kicker { color: var(--ink); }
+.amount { font-family: var(--font-latin); font-weight: 800; font-size: clamp(56px, 9vw, 96px); line-height: 1; margin-top: 8px; letter-spacing: -.02em; }
+.amount small { font-family: var(--font-ja); font-size: 16px; font-weight: 700; margin-left: 6px; letter-spacing: 0; }
+.free { margin-top: 16px; display: inline-block; background: var(--yellow); color: var(--ink); font-weight: 900; padding: 4px 14px; border-radius: 3px; }
+.includes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.includes div { background: rgba(255,255,255,.14); border-radius: 6px; padding: 16px 18px; font-weight: 700; }
+.includes span { display: block; font-weight: 400; font-size: 13px; color: rgba(255,255,255,.85); margin-top: 2px; }
+
+/* Name（緑の帯） */
+.name { background: var(--green); color: #fff; }
+.name .inner { padding-block: 88px; display: grid; grid-template-columns: auto 1fr; gap: 56px; align-items: center; }
+.name .inner > * { min-width: 0; }
+.word { font-family: var(--font-latin); font-weight: 800; font-size: clamp(52px, 9vw, 110px); line-height: 1; color: var(--yellow); letter-spacing: -.01em; }
+.word-sub { margin-top: 12px; font-weight: 700; }
+.name p.body { color: rgba(255,255,255,.9); }
+.name p.body + p.body { margin-top: 14px; }
+
+/* FAQ */
+.faq-band .inner { padding-block: 88px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 48px; }
+.faq-band .inner > * { min-width: 0; }
+.faq div { padding-block: 18px; border-bottom: 1.5px solid var(--ink); }
+.faq div:first-child { padding-top: 0; }
+.faq dt { font-weight: 700; }
+.faq dd { color: var(--sub); margin-top: 4px; }
+
+/* Signup（黄色の帯） */
+.signup { background: var(--yellow); }
+.signup .inner { padding-block: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.signup .inner > * { min-width: 0; }
+.signup h2 { margin-top: 10px; font-size: clamp(24px, 3.4vw, 36px); }
+.form { display: grid; gap: 18px; }
+.form label { display: grid; gap: 6px; font-size: 13px; font-weight: 700; }
+.form input, .form select { font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); border: 2px solid var(--ink); border-radius: 4px; padding: 10px 12px; width: 100%; }
+.form .btn { justify-self: start; }
+.form-msg { font-weight: 700; }
+.consent { font-size: 12px; }
+.form .btn:disabled { opacity: .5; cursor: wait; }
+
+footer { background: var(--ink); color: #fff; }
+footer .inner { padding-block: 32px 40px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; }
+footer b { font-family: var(--font-latin); font-weight: 800; font-size: 18px; }
+
+/* 動き（動きを減らす設定の人には出さない） */
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1 .nw { animation: rise .9s cubic-bezier(.2,.7,.2,1) both; }
+  .hero h1 .nw:nth-of-type(2) { animation-delay: .12s; }
+  .hero h1 .nw:nth-of-type(3) { animation-delay: .24s; }
+  .hero h1 .nw:nth-of-type(4) { animation-delay: .36s; }
+  .hero .lead, .hero .cta-row { animation: rise .9s .5s cubic-bezier(.2,.7,.2,1) both; }
+  .hero .cta-row { animation-delay: .62s; }
+  .art .s { transform-box: fill-box; transform-origin: center; animation: pop .8s var(--d) cubic-bezier(.3,1.4,.5,1) both; }
+  .art .fan { transform-origin: left bottom; animation-name: swing; }
+  .art .hill { transform-origin: center bottom; animation-name: grow; }
+  .art .ring { animation: pop .8s var(--d) cubic-bezier(.3,1.4,.5,1) both, spin 14s 1.6s linear infinite; }
+  .art .sun { animation: pop .8s var(--d) cubic-bezier(.3,1.4,.5,1) both, bob 5s 1.6s ease-in-out infinite; }
+
+  .reveal { transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+  .reveal.pre { opacity: 0; transform: translateY(36px); }
+  .card { transition: transform .5s cubic-bezier(.2,.7,.2,1), opacity .9s, box-shadow .35s; transition-delay: var(--d, 0s); }
+  .card:hover { transform: translateY(-6px) rotate(-.6deg); box-shadow: 0 14px 30px -18px rgba(26,26,26,.45); }
+  .card.c2:hover { transform: translateY(-6px) rotate(.6deg); }
+
+  .word.play .ch { display: inline-block; animation: drop .7s calc(var(--i) * 80ms) cubic-bezier(.3,1.5,.5,1) both; }
+  .free.play { animation: stamp .6s .5s cubic-bezier(.3,1.6,.5,1) both; }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } }
+@keyframes pop { from { opacity: 0; transform: scale(.4); } }
+@keyframes swing { from { opacity: 0; transform: rotate(-90deg); } }
+@keyframes grow { from { opacity: 0; transform: scaleY(0); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes bob { 50% { transform: translateY(-8px); } }
+@keyframes drop { from { opacity: 0; transform: translateY(-40px) rotate(-8deg); } }
+@keyframes stamp { from { opacity: 0; transform: scale(1.6) rotate(-6deg); } }
+
+@media (max-width: 820px) {
+  .top nav { display: none; }
+  .hero .inner, .about .inner, .price-band .inner, .name .inner, .faq-band .inner, .signup .inner { grid-template-columns: 1fr; gap: 32px; }
+  .hero .inner { padding-block: 16px 56px; }
+  .art { justify-self: center; max-width: 300px; order: -1; }
+  .cards { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)); padding-bottom: 8px; }
+  .card { flex: 0 0 84%; scroll-snap-align: start; }
+  .steps { grid-template-columns: 1fr; gap: 28px; }
+  .includes { grid-template-columns: 1fr; }
+  .about .inner, .how .inner, .name .inner, .faq-band .inner { padding-block: 64px; }
+  .price-band .inner, .signup .inner { padding-block: 64px; }
+}
+</style>
+<style>body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+<header class="band top">
+  <div class="inner">
+    <a class="mark" href="#top" id="top" aria-label="ラフメット">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+        <circle cx="15" cy="15" r="15" fill="#f6c343"/>
+        <path d="M0 15a15 15 0 0 0 30 0z" fill="#e8553e"/>
+      </svg>
+      <b>Rahmet</b>
+    </a>
+    <nav aria-label="ページ内">
+      <a href="#how">使い方</a>
+      <a href="#price">料金</a>
+      <a href="#faq">よくある質問</a>
+      <a href="#signup">事前登録</a>
+    </nav>
+  </div>
+</header>
+
+<div class="band hero">
+  <div class="inner">
+    <div>
+      <h1><span class="nw">届いた口コミに、</span><br><span class="nw">きちんと</span><span class="nw hl">「ありがとう」</span><span class="nw">を。</span></h1>
+      <p class="lead">Googleマップに口コミが届くと、お店の口調に合わせた返信の案がLINEに届きます。読んで、よければ送るだけ。</p>
+      <div class="cta-row">
+        <a class="btn" href="#signup">事前登録する</a>
+        <p class="price"><b>¥1,480</b>／月　<span class="nw">初月無料</span></p>
+      </div>
+    </div>
+    <svg class="art" viewBox="0 0 400 400" role="img" aria-label="色とりどりの図形のイラスト">
+      <rect class="s" style="--d:.05s" x="0" y="0" width="200" height="200" fill="#3d8bd4"/>
+      <rect class="s" style="--d:.15s" x="200" y="0" width="200" height="200" fill="#f4b3c2"/>
+      <rect class="s" style="--d:.25s" x="0" y="200" width="200" height="200" fill="#2b9670"/>
+      <rect class="s" style="--d:.35s" x="200" y="200" width="200" height="200" fill="#1e2858"/>
+      <g class="px" data-k="-0.12"><circle class="s sun" style="--d:.55s" cx="100" cy="100" r="70" fill="#f6c343"/></g>
+      <g class="px" data-k="0.06"><path class="s fan" style="--d:.65s" d="M200 200a200 200 0 0 1 200-200v200z" fill="#e8553e"/></g>
+      <g class="px" data-k="-0.05"><path class="s hill" style="--d:.75s" d="M0 400a100 100 0 0 1 200 0z" fill="#ffffff"/></g>
+      <g class="px" data-k="0.1"><circle class="s ring" style="--d:.85s" cx="300" cy="300" r="56" fill="none" stroke="#f6c343" stroke-width="22" stroke-dasharray="250 102"/></g>
+    </svg>
+  </div>
+</div>
+
+<section class="band letters" aria-labelledby="letters-h">
+  <div class="inner">
+    <div class="sec-head">
+      <p class="kicker latin">Sample</p>
+      <h2 id="letters-h"><span class="nw">こんな返事が</span><span class="nw">届きます</span></h2>
+    </div>
+    <div class="cards">
+      <article class="card c1">
+        <p class="tag"><span>★★★★★</span><span>Lunch</span></p>
+        <p class="review"><span>お客さんの口コミ</span>おばんざいプレートがどれも優しい味で、店員さんも気さくで居心地よかったです。また来ます！</p>
+        <p class="reply-label">返信の案</p>
+        <p class="reply">うれしいお言葉をありがとうございます。おばんざいは毎朝その日の野菜で仕込んでいるので、励みになります。季節ごとに中身が変わりますので、またぜひお立ち寄りください。</p>
+      </article>
+      <article class="card c2">
+        <p class="tag"><span>★★★☆☆</span><span>Waiting time</span></p>
+        <p class="review"><span>お客さんの口コミ</span>味はおいしかったけど、お昼どきで料理が出てくるまで30分近くかかりました。</p>
+        <p class="reply-label">返信の案</p>
+        <p class="reply">ご来店ありがとうございます。お料理をお待たせしてしまい、申し訳ございませんでした。お昼の段取りを見直し、もっと早くお出しできるようにいたします。</p>
+      </article>
+      <article class="card c3">
+        <p class="tag"><span>★★★★★</span><span>English</span></p>
+        <p class="review"><span>お客さんの口コミ</span>Lovely little café near Kinkaku-ji. The matcha latte was amazing!</p>
+        <p class="reply-label">返信の案</p>
+        <p class="reply">Thank you so much for visiting us! We're delighted you enjoyed the matcha latte. Have a wonderful time in Kyoto.
+（訳）抹茶ラテを気に入っていただけてうれしいです。京都の旅を楽しんでください。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band about" aria-labelledby="about-h">
+  <div class="inner">
+    <div>
+      <p class="kicker latin">About</p>
+      <h2 id="about-h"><span class="nw">返事をしたい</span><span class="nw">気持ちはあるのに、</span><span class="nw">手が回らない。</span></h2>
+    </div>
+    <div>
+      <p>口コミへの返信は、お店の印象を左右します。でも営業中は時間がないし、厳しい口コミほど言葉に迷う。外国語の口コミは読むのもひと苦労です。</p>
+      <p>ラフメットは、その最初の一文を代わりに書くサービスです。送るかどうかを決めるのは、いつもお店の方です。</p>
+    </div>
+  </div>
+</section>
+
+<section class="band how" id="how" aria-labelledby="how-h">
+  <div class="inner">
+    <div class="sec-head">
+      <p class="kicker latin">How it works</p>
+      <h2 id="how-h"><span class="nw">使い方は</span><span class="nw">3ステップ</span></h2>
+    </div>
+    <ol class="steps">
+      <li><span class="num">1</span><h3>お店のページとつなぐ</h3><p>Googleの公式の連携を使います。パスワードをお預かりすることはありません。</p></li>
+      <li><span class="num">2</span><h3>返事の口調を決める</h3><p>ていねいに、親しみをこめて、関西弁まじりで。お店に合う話し方を選べます。</p></li>
+      <li><span class="num">3</span><h3>LINEで読んで、送る</h3><p>口コミが届くたびに返信の案が届きます。そのまま送っても、少し手を入れても。</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="band price-band" id="price" aria-labelledby="price-h">
+  <div class="inner">
+    <div>
+      <p class="kicker latin" id="price-h">Price</p>
+      <p class="amount">¥1,480<small>／月（税込）</small></p>
+      <p class="free">はじめの1か月は無料</p>
+    </div>
+    <div class="includes">
+      <div>返信の案を何件でも<span>口コミの数に上限なし</span></div>
+      <div>LINEでお知らせ<span>ボタンひとつで返信</span></div>
+      <div>外国語の口コミにも<span>英語・中国語・韓国語で返信</span></div>
+      <div>月に一度のまとめ<span>どんな声が多かったかをお届け</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band name" aria-labelledby="name-h">
+  <div class="inner">
+    <div>
+      <p class="word" id="name-h">Рахмет</p>
+      <p class="word-sub"><span class="nw">ラフメット</span>　<span class="nw">カザフ語で「ありがとう」</span></p>
+    </div>
+    <div>
+      <p class="body">カザフスタンを旅したとき、何度も口にした言葉です。店先で、宿で、道を教えてくれた人に。短いけれど、気持ちがちゃんと届く一言でした。</p>
+      <p class="body">口コミを書いてくれたお客さんにも、同じように<span class="nw">「ありがとう」</span>を返せるように。そんな思いで名前をつけました。</p>
+    </div>
+  </div>
+</section>
+
+<section class="band faq-band" id="faq" aria-labelledby="faq-h">
+  <div class="inner">
+    <div class="sec-head" style="display:block">
+      <p class="kicker latin">FAQ</p>
+      <h2 id="faq-h">よくある質問</h2>
+    </div>
+    <dl class="faq">
+      <div><dt>勝手に返信されることはありますか。</dt><dd>ありません。返信はかならず、お店の方が確認してから送られます。</dd></div>
+      <div><dt>パソコンがなくても使えますか。</dt><dd>はい。スマホとLINEがあれば使えます。</dd></div>
+      <div><dt>厳しい口コミにはどう返しますか。</dt><dd>言い訳をせず、おわびと次に向けた姿勢が伝わる文を提案します。送る前に自由に書き直せます。</dd></div>
+      <div><dt>食べログやホットペッパーには対応していますか。</dt><dd>はじめはGoogleマップのみです。ほかのサイトは、ご要望を伺いながら検討します。</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="band signup" id="signup" aria-labelledby="signup-h">
+  <div class="inner">
+    <div>
+      <p class="kicker latin">Pre-registration</p>
+      <h2 id="signup-h"><span class="nw">公開の準備ができたら、</span><span class="nw">いちばんに</span><span class="nw">お知らせします。</span></h2>
+    </div>
+    <form class="form" id="signup-form" novalidate>
+      <label for="f-shop">お店の名前<input id="f-shop" name="shop" placeholder="北大路カフェ"></label>
+      <label for="f-type">業種
+        <select id="f-type" name="type">
+          <option>飲食店・カフェ</option><option>美容室・サロン</option><option>整体・治療院</option><option>小売・お土産</option><option>宿泊</option><option>その他</option>
+        </select>
+      </label>
+      <label for="f-mail">メールアドレス<input id="f-mail" name="mail" type="email" placeholder="shop@example.com"></label>
+      <p class="consent">登録すると、<a href="privacy.html">プライバシーポリシー</a>に同意したものとみなします。</p>
+      <button class="btn" type="submit">登録する</button>
+      <p class="form-msg" id="form-msg" hidden></p>
+    </form>
+  </div>
+</section>
+
+<footer class="band">
+  <div class="inner">
+    <b>Rahmet</b>
+    <span>ラフメット　京都市北区　｜　サービスは公開準備中です　｜　<a href="privacy.html">プライバシーポリシー</a></span>
+  </div>
+</footer>
+
+<script>
+// 事前登録の送り先（Googleフォーム）。entry の番号がそろうまでは送信しない
+const FORM = {
+  action: "https://docs.google.com/forms/d/e/1FAIpQLSd5OpWe2oI0kiX1r5YAl_N04yVGz98HqMcc46kxSCikaZE2Rw/formResponse",
+  shop: "2071469860",
+  type: "",
+  mail: "877468578"
+};
+
+const $ = id => document.getElementById(id);
+$("signup-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = $("form-msg");
+  const mail = $("f-mail");
+  const button = e.target.querySelector("button");
+  msg.hidden = false;
+  if (!$("f-shop").value.trim()) { msg.textContent = "お店の名前を入れてください。"; $("f-shop").focus(); return; }
+  if (!mail.value.trim() || !mail.checkValidity()) { msg.textContent = "メールアドレスを shop@example.com のような形で入れてください。"; mail.focus(); return; }
+  if (!FORM.shop || !FORM.mail) { msg.textContent = "ただいま登録の準備中です。少し時間をおいてお試しください。"; return; }
+
+  const body = new URLSearchParams({
+    [`entry.${FORM.shop}`]: $("f-shop").value.trim(),
+    [`entry.${FORM.mail}`]: mail.value.trim()
+  });
+  if (FORM.type) body.append(`entry.${FORM.type}`, $("f-type").value);
+
+  button.disabled = true;
+  msg.textContent = "送信しています…";
+  try {
+    // Googleフォームは返事の中身を見せてくれないので、送れたかどうかだけで判断する
+    await fetch(FORM.action, { method: "POST", mode: "no-cors", body });
+    e.target.reset();
+    msg.textContent = "登録ありがとうございます。公開の準備ができたら、メールでお知らせします。";
+  } catch {
+    msg.textContent = "送信できませんでした。通信の状態を確かめて、もう一度お試しください。";
+  } finally {
+    button.disabled = false;
+  }
+});
+
+// スクロールで現れる動き。画面の外にあるものだけ隠しておき、見えたら出す
+const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!calm && "IntersectionObserver" in window) {
+  const word = document.querySelector(".word");
+  word.innerHTML = [...word.textContent].map((c, i) => `<span class="ch" style="--i:${i}">${c}</span>`).join("");
+
+  const amount = document.querySelector(".amount");
+  const amountText = amount.firstChild;
+  function countUp() {
+    const start = performance.now();
+    (function tick(now) {
+      const t = Math.min(1, (now - start) / 1100);
+      const v = Math.round(1480 * (1 - Math.pow(1 - t, 3)));
+      amountText.textContent = "¥" + v.toLocaleString("ja-JP");
+      if (t < 1) requestAnimationFrame(tick);
+    })(start);
+  }
+
+  function onShow(el) {
+    if (el.contains(word)) word.classList.add("play");
+    if (el.contains(amount)) { countUp(); el.querySelector(".free")?.classList.add("play"); }
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      en.target.classList.remove("pre");
+      setTimeout(() => en.target.style.removeProperty("--d"), 1400);
+      onShow(en.target);
+      io.unobserve(en.target);
+    });
+  }, { threshold: 0.15 });
+
+  const groups = [".sec-head", ".card", ".about .inner > *", ".steps li", ".price-band .inner > *", ".includes div", ".name .inner > *", ".faq div", ".signup .inner > *"];
+  groups.forEach(sel => {
+    document.querySelectorAll(sel).forEach((el, i) => {
+      el.classList.add("reveal");
+      el.style.setProperty("--d", (i % 4) * 0.1 + "s");
+      if (el.getBoundingClientRect().top > innerHeight) { el.classList.add("pre"); io.observe(el); }
+      else onShow(el);
+    });
+  });
+
+  // ヒーローの図形をスクロールに合わせて少しずつずらす
+  const layers = [...document.querySelectorAll(".art .px")];
+  let ticking = false;
+  addEventListener("scroll", () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = Math.min(scrollY, 700);
+      layers.forEach(g => g.setAttribute("transform", `translate(0 ${(y * g.dataset.k).toFixed(1)})`));
+      ticking = false;
+    });
+  }, { passive: true });
+}
+</script>
+</body>
+</html>
