@@ -400,7 +400,7 @@ $("signup-form").addEventListener("submit", async e => {
     // Googleフォームは返事の中身を見せてくれないので、送れたかどうかだけで判断する
     await fetch(FORM.action, { method: "POST", mode: "no-cors", body });
     e.target.reset();
-    msg.textContent = "登録ありがとうございます。公開の準備ができたら、メールでお知らせします。";
+    msg.textContent = "登録ありがとうございます。確認のメールをお送りしました。届かないときは、迷惑メールのフォルダもご確認ください。";
   } catch {
     msg.textContent = "送信できませんでした。通信の状態を確かめて、もう一度お試しください。";
   } finally {
